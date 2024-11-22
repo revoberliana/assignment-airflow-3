@@ -431,6 +431,7 @@ services:
   ksqldb-cli:
     image: confluentinc/ksqldb-cli:0.29.0
     container_name: ksqldb-cli
+    # platform: linux/amd64
     depends_on:
       - kafka1
       - ksqldb-server

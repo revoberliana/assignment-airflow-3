@@ -426,7 +426,7 @@ services:
       - kafka
 
   ksqldb-cli:
-    image: confluentinc/ksqldb-cli:0.29.0
+    image: confluentinc/cp-ksqldb-cli:7.3.2
     container_name: ksqldb-cli
     platform: linux/amd64
     depends_on:
@@ -434,6 +434,32 @@ services:
       - ksqldb-server
     entrypoint: /bin/sh
     tty: true
+    profiles:
+      - kafka
+
+  kafka-connect:
+    image: confluentinc/cp-kafka-connect:7.3.2
+    container_name: kafka-connect
+    ports:
+      - 8083:8083
+    command:
+      - bash
+      - -c
+      - |
+        echo "Installing Connector"
+        confluent-hub install --no-prompt debezium/debezium-connector-mysql:latest
+        confluent-hub install --no-prompt debezium/debezium-connector-postgresql:latest
+        confluent-hub install --no-prompt confluentinc/kafka-connect-jdbc:latest
+        #
+        echo "Launching Kafka Connect worker"
+        /etc/confluent/docker/run &
+        #
+        sleep infinity
+    env_file:
+      - ./kafka/.env
+    depends_on:
+      - kafka-schema-registry
+      - kafka1
     profiles:
       - kafka
 

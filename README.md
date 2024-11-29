@@ -8,9 +8,11 @@
 
 ## postgres
 `docker compose --profile postgres up -d`
+or `docker compose --profile db up -d` (mysql + postgres)
 
 ## mysql
 `docker compose --profile mysql up -d`
+or `docker compose --profile db up -d` (mysql + postgres)
 
 ## hive
 `docker compose --profile hive up -d`
